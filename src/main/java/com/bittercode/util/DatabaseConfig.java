@@ -1,30 +1,36 @@
 package com.bittercode.util;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
-class DatabaseConfig {
+public class DatabaseConfig {
 
-    static Properties prop = new Properties();
+    private static final String CONFIG_PATH = "/app/config.properties";
+
+    public static String DRIVER_NAME;
+    public static String CONNECTION_STRING;
+    public static String DB_USER_NAME;
+    public static String DB_PASSWORD;
+
     static {
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream(CONFIG_PATH)) {
+            props.load(fis);
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream input = classLoader.getResourceAsStream("application.properties");
+            DRIVER_NAME = props.getProperty("db.driver");
+            CONNECTION_STRING = props.getProperty("db.url");
+            DB_USER_NAME = props.getProperty("db.username");
+            DB_PASSWORD = props.getProperty("db.password");
 
-        try {
-            prop.load(input);
+            System.out.println("Loaded DB config: " + CONNECTION_STRING + ", user=" + DB_USER_NAME);
+
+            if (CONNECTION_STRING == null || DB_USER_NAME == null || DB_PASSWORD == null) {
+                throw new RuntimeException("Missing DB config in " + CONFIG_PATH);
+            }
+
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Unable to load config from " + CONFIG_PATH, e);
         }
     }
-
-    public final static String DRIVER_NAME = prop.getProperty("db.driver");
-    public final static String DB_HOST = prop.getProperty("db.host");
-    public final static String DB_PORT = prop.getProperty("db.port");
-    public final static String DB_NAME = prop.getProperty("db.name");
-    public final static String DB_USER_NAME = prop.getProperty("db.username");
-    public final static String DB_PASSWORD = prop.getProperty("db.password");
-    public final static String CONNECTION_STRING = DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
-
 }
