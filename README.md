@@ -11,18 +11,18 @@
 
 ### Technologies used:-
 1. Front-End Development:
-- HTML
-- CSS
-- Javascript
-- BootStrap
+    - HTML
+    - CSS
+    - Javascript
+    - BootStrap
 
 2. Back-End Development:
-- Java [JDK 8+]
-- JDBC
-- Servlet
+    - Java [JDK 8+]
+    - JDBC
+    - Servlet
 
 3. Database:
-- MySql
+    - MySql
 ---
 ## CONTAINERISATION:
 - Clone repository 
